@@ -1,0 +1,90 @@
+{
+  "components": [
+    {
+      "subtype": "date",
+      "dateLabel": "Publish Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_1g29reo",
+        "columns": null
+      },
+      "id": "Field_1735r3q",
+      "key": "publishdate",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Offer Deadline",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_05m526t",
+        "columns": null
+      },
+      "id": "Field_07mim5v",
+      "key": "offerdeadline",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Provider",
+      "values": [
+        {
+          "label": "Provider A",
+          "value": "provider1"
+        },
+        {
+          "label": "Provider B",
+          "value": "provider2"
+        },
+        {
+          "label": "Provider C",
+          "value": "provider3"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1l7n5cx",
+        "columns": null
+      },
+      "id": "Field_1dlmqxk",
+      "key": "select",
+      "validate": {
+        "required": true
+      },
+      "description": "Provider Selection"
+    },
+    {
+      "label": "Remarks",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0mqcrab",
+        "columns": null
+      },
+      "id": "Field_07x2c73",
+      "key": "remarks"
+    },
+    {
+      "label": "Publish",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0zjj0rg",
+        "columns": null
+      },
+      "id": "Field_1fpmizs",
+      "properties": {}
+    }
+  ],
+  "type": "default",
+  "id": "publishContract",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.41.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  camunda:
+    image: camunda/camunda-bpm-platform:run-latest
+    container_name: camunda7
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Europe/Berlin
+    networks:
+      - contract-net
+
+  postgres:
+    image: postgres:16
+    container_name: contract-postgres
+    environment:
+      - POSTGRES_USER=contract_user
+      - POSTGRES_PASSWORD=contract_pass
+      - POSTGRES_DB=contract_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - contract-net
+
+networks:
+  contract-net:
+
+volumes:
+  pgdata:
+
