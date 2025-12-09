@@ -77,8 +77,16 @@ pass: ```demo```
 Phase 2: create backend (FastAPI) and connect to PostgreSQL
 
 a. Create virtual environment
+
 Your terminal should show:
+
 (venv) user@kali:~/contract-tool/backend$
+
+```
+backend/
+ ├── main.py          # FastAPI application
+ ├── db.py            # Database models + session
+```
 
 Phase 3: create the first BPMN process and deploy to Camunda
 
