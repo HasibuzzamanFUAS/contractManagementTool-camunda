@@ -9,7 +9,7 @@
         "columns": null
       },
       "id": "Field_1735r3q",
-      "key": "publishdate",
+      "key": "publishDate",
       "validate": {
         "required": true
       }
@@ -23,48 +23,20 @@
         "columns": null
       },
       "id": "Field_07mim5v",
-      "key": "offerdeadline",
+      "key": "offerDeadline",
       "validate": {
         "required": true
       }
     },
     {
-      "label": "Provider",
-      "values": [
-        {
-          "label": "Provider A",
-          "value": "provider1"
-        },
-        {
-          "label": "Provider B",
-          "value": "provider2"
-        },
-        {
-          "label": "Provider C",
-          "value": "provider3"
-        }
-      ],
-      "type": "select",
-      "layout": {
-        "row": "Row_1l7n5cx",
-        "columns": null
-      },
-      "id": "Field_1dlmqxk",
-      "key": "select",
-      "validate": {
-        "required": true
-      },
-      "description": "Provider Selection"
-    },
-    {
-      "label": "Remarks",
+      "label": "Contract Remarks",
       "type": "textarea",
       "layout": {
         "row": "Row_0mqcrab",
         "columns": null
       },
       "id": "Field_07x2c73",
-      "key": "remarks"
+      "key": "contractRemarks"
     },
     {
       "label": "Publish",

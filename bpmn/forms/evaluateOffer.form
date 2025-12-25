@@ -8,7 +8,7 @@
         "columns": null
       },
       "id": "Field_0h2gc9q",
-      "key": "offerprice",
+      "key": "offerPrice",
       "description": "offer your price",
       "validate": {
         "required": true
@@ -22,7 +22,7 @@
         "columns": null
       },
       "id": "Field_02nj8qp",
-      "key": "offersummary"
+      "key": "offerSummary"
     },
     {
       "label": "Meet Requirements?",
@@ -42,7 +42,7 @@
         "columns": null
       },
       "id": "Field_07g658q",
-      "key": "meetrequirement",
+      "key": "meetRequirement",
       "validate": {
         "required": true
       }
@@ -69,7 +69,7 @@
         "columns": null
       },
       "id": "Field_1hd29xw",
-      "key": "offerquality",
+      "key": "offerQuality",
       "validate": {
         "required": true
       }
@@ -92,7 +92,7 @@
         "columns": null
       },
       "id": "Field_06bft5i",
-      "key": "offerdecision",
+      "key": "offerDecision",
       "validate": {
         "required": true
       }

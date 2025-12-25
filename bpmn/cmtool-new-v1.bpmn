@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions
   xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
@@ -6,130 +5,93 @@
   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns:modeler="http://camunda.org/schema/modeler/1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  id="Definitions_ContractManagement"
-  targetNamespace="http://frauas.de/contract-management">
+  id="Definitions_cmtool"
+  targetNamespace="http://frauas.de/contract"
+  exporter="Camunda Modeler"
+  exporterVersion="5.41.0"
+  modeler:executionPlatform="Camunda Platform"
+  modeler:executionPlatformVersion="7.24.0">
 
+  <!-- ✅ Collaboration (REQUIRED FOR DIAGRAM) -->
+  <bpmn:collaboration id="ContractCollaboration">
+    <bpmn:participant
+      id="FraUAS"
+      name="FraUAS Contract Management"
+      processRef="ContractManagementProcess"/>
+  </bpmn:collaboration>
+
+  <!-- ✅ Process -->
   <bpmn:process
     id="ContractManagementProcess"
     name="Contract Management Process"
-    isExecutable="true">
+    isExecutable="true"
+    camunda:historyTimeToLive="180">
 
-    <!-- Start Event -->
-    <bpmn:startEvent id="StartEvent" name="Contract Request Started">
-      <bpmn:outgoing>Flow_Start_To_Create</bpmn:outgoing>
+    <bpmn:startEvent id="StartEvent" name="Start">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
 
-    <!-- Create Contract -->
     <bpmn:userTask
       id="CreateContract"
       name="Create Contract Request"
-      camunda:assignee="procurement_manager">
-      <bpmn:incoming>Flow_Start_To_Create</bpmn:incoming>
-      <bpmn:outgoing>Flow_Create_To_Offer</bpmn:outgoing>
+      camunda:candidateGroups="pm">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- Supplier Offer -->
-    <bpmn:userTask
-      id="SupplierOffer"
-      name="Supplier Offer Submission"
-      camunda:assignee="supplier">
-      <bpmn:incoming>Flow_Create_To_Offer</bpmn:incoming>
-      <bpmn:outgoing>Flow_Offer_To_Negotiation</bpmn:outgoing>
-    </bpmn:userTask>
-
-    <!-- Negotiation -->
-    <bpmn:userTask
-      id="Negotiation"
-      name="Negotiation of Terms"
-      camunda:assignee="procurement_manager">
-      <bpmn:incoming>Flow_Offer_To_Negotiation</bpmn:incoming>
-      <bpmn:outgoing>Flow_Negotiation_To_Legal</bpmn:outgoing>
-    </bpmn:userTask>
-
-    <!-- Legal Review -->
     <bpmn:userTask
       id="LegalReview"
       name="Legal Review"
-      camunda:assignee="legal_counsel">
-      <bpmn:incoming>Flow_Negotiation_To_Legal</bpmn:incoming>
-      <bpmn:outgoing>Flow_Legal_To_Gateway</bpmn:outgoing>
+      camunda:candidateGroups="lc">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- Approval Gateway -->
-    <bpmn:exclusiveGateway
-      id="ApprovalGateway"
-      name="Contract Approved?">
-      <bpmn:incoming>Flow_Legal_To_Gateway</bpmn:incoming>
-      <bpmn:outgoing>Flow_Approved</bpmn:outgoing>
-      <bpmn:outgoing>Flow_Rejected</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="ApprovedGateway" name="Approved?">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_No</bpmn:outgoing>
     </bpmn:exclusiveGateway>
 
-    <!-- Store Final Contract -->
     <bpmn:serviceTask
       id="StoreContract"
       name="Store Final Contract"
-      camunda:type="external">
-      <bpmn:incoming>Flow_Approved</bpmn:incoming>
-      <bpmn:outgoing>Flow_To_End</bpmn:outgoing>
+      camunda:type="external"
+      camunda:topic="store-contract">
+      <bpmn:incoming>Flow_Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_End</bpmn:outgoing>
     </bpmn:serviceTask>
 
-    <!-- End Event -->
     <bpmn:endEvent id="EndEvent" name="Contract Finalized">
-      <bpmn:incoming>Flow_To_End</bpmn:incoming>
+      <bpmn:incoming>Flow_End</bpmn:incoming>
     </bpmn:endEvent>
 
-    <!-- Sequence Flows -->
-    <bpmn:sequenceFlow
-      id="Flow_Start_To_Create"
-      sourceRef="StartEvent"
-      targetRef="CreateContract"/>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent" targetRef="CreateContract"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="CreateContract" targetRef="LegalReview"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="LegalReview" targetRef="ApprovedGateway"/>
 
-    <bpmn:sequenceFlow
-      id="Flow_Create_To_Offer"
-      sourceRef="CreateContract"
-      targetRef="SupplierOffer"/>
-
-    <bpmn:sequenceFlow
-      id="Flow_Offer_To_Negotiation"
-      sourceRef="SupplierOffer"
-      targetRef="Negotiation"/>
-
-    <bpmn:sequenceFlow
-      id="Flow_Negotiation_To_Legal"
-      sourceRef="Negotiation"
-      targetRef="LegalReview"/>
-
-    <bpmn:sequenceFlow
-      id="Flow_Legal_To_Gateway"
-      sourceRef="LegalReview"
-      targetRef="ApprovalGateway"/>
-
-    <!-- Approved -->
-    <bpmn:sequenceFlow
-      id="Flow_Approved"
-      sourceRef="ApprovalGateway"
-      targetRef="StoreContract">
+    <bpmn:sequenceFlow id="Flow_Yes" sourceRef="ApprovedGateway" targetRef="StoreContract">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">
         ${approved == true}
       </bpmn:conditionExpression>
     </bpmn:sequenceFlow>
 
-    <!-- Rejected (Loop) -->
-    <bpmn:sequenceFlow
-      id="Flow_Rejected"
-      sourceRef="ApprovalGateway"
-      targetRef="Negotiation">
+    <bpmn:sequenceFlow id="Flow_No" sourceRef="ApprovedGateway" targetRef="CreateContract">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">
         ${approved == false}
       </bpmn:conditionExpression>
     </bpmn:sequenceFlow>
 
-    <bpmn:sequenceFlow
-      id="Flow_To_End"
-      sourceRef="StoreContract"
-      targetRef="EndEvent"/>
+    <bpmn:sequenceFlow id="Flow_End" sourceRef="StoreContract" targetRef="EndEvent"/>
 
   </bpmn:process>
 
+  <!-- ✅ Diagram -->
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="ContractCollaboration"/>
+  </bpmndi:BPMNDiagram>
+
 </bpmn:definitions>
+``
